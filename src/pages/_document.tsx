@@ -1,0 +1,26 @@
+import { Html, Head, Main, NextScript } from "next/document";
+import Image from "next/image";
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head>
+        <title>RoutineChecker-Achieve more Stress less</title>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+        />
+
+        <script
+          defer
+          src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"
+        ></script>
+      </Head>
+
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}

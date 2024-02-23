@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "@/styles/nav.module.css";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
-
+ 
 const navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
 

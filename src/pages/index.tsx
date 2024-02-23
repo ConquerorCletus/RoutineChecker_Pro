@@ -36,7 +36,7 @@ const Homepage: React.FC = () => {
                 >
                   Start taking control of your time today!
                 </Link>
-                <Link
+                 <Link
                   href="/register"
                   className="inline-block w-full sm:w-auto py-4 px-6 mb-4 sm:mb-0 sm:mr-4 text-center font-heading font-medium text-base text-white bg-orange-400 hover:bg-blue-500 hover:border-green-600  transition duration-200"
                 >

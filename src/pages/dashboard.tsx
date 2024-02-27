@@ -3,14 +3,17 @@ import Navbar from '@/components/dNavbar';
 import Banner from '@/components/banner';
 import TaskCard from '@/components/stat';
 import Tasktab from '@/components/Tasktab';
+import PrivateRoute from '@/components/PrivateRoute';
 
 const dashboard = () => {
   return (
     <>
-      <Navbar />
-      <Banner />
-      <TaskCard />
-      <Tasktab />
+      <PrivateRoute>
+        <Navbar />
+        <Banner />
+        <TaskCard />
+        <Tasktab />
+      </PrivateRoute>
     </>
   );
 };

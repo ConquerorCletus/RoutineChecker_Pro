@@ -4,7 +4,12 @@ import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import Image from 'next/image';
 // React icon imports
-import { FaChevronDown, FaRegUser,  FaSignOutAlt, FaTasks } from 'react-icons/fa';
+import {
+  FaChevronDown,
+  FaRegUser,
+  FaSignOutAlt,
+  FaTasks,
+} from 'react-icons/fa';
 import { FaCalendarCheck } from 'react-icons/fa6';
 import { RxLapTimer } from 'react-icons/rx';
 
@@ -59,52 +64,56 @@ const dNavbar = () => {
               <div className='px-1 py-1 '>
                 <Menu.Item>
                   {({ active }) => (
-                    <button
+                    <Link
+                      href='/taskpage'
                       className={`${
                         active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <FaTasks className='mr-2' />
                       New Task
-                    </button>
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button
+                    <Link
+                      href='/calendar'
                       className={`${
                         active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <FaCalendarCheck className='mr-2' />
                       Mark Calendar
-                    </button>
+                    </Link>
                   )}
                 </Menu.Item>
               </div>
               <div className='px-1 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <button
+                    <Link
+                      href='/dashboard'
                       className={`${
                         active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <RxLapTimer className='mr-2' />
-                      Pomodoro timer
-                    </button>
+                      dashboard
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <button
+                    <Link
+                      href='/profile'
                       className={`${
                         active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <FaRegUser className='mr-2' />
                       Profile
-                    </button>
+                    </Link>
                   )}
                 </Menu.Item>
               </div>

@@ -1,63 +1,79 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tab } from '@headlessui/react';
+import { db, auth } from '../helpers/firebase';
+import {
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+  onSnapshot,
+  QuerySnapshot,
+} from 'firebase/firestore';
+import PrivateRoute from './PrivateRoute';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
+const currentDate = new Date();
+const userId = auth.currentUser?.uid;
+const myTask = query(collection(db, 'tasks'), where('userId', '==', userId));
 
-export default function Example() {
-  let [categories] = useState({
-    Recent: [
-      {
-        id: 1,
-        title: 'Does drinking coffee make you smarter?',
-        date: '5h ago',
-        commentCount: 5,
-        shareCount: 2,
-      },
-      {
-        id: 2,
-        title: "So you've bought coffee... now what?",
-        date: '2h ago',
-        commentCount: 3,
-        shareCount: 2,
-      },
-    ],
-    Popular: [
-      {
-        id: 1,
-        title: 'Is tech making coffee better or worse?',
-        date: 'Jan 7',
-        commentCount: 29,
-        shareCount: 16,
-      },
-      {
-        id: 2,
-        title: 'The most innovative things happening in coffee',
-        date: 'Mar 19',
-        commentCount: 24,
-        shareCount: 12,
-      },
-    ],
-    Trending: [
-      {
-        id: 1,
-        title: 'Ask Me Anything: 10 answers to your questions about coffee',
-        date: '2d ago',
-        commentCount: 9,
-        shareCount: 5,
-      },
-      {
-        id: 2,
-        title: "The worst advice we've ever heard about coffee",
-        date: '4d ago',
-        commentCount: 1,
-        shareCount: 2,
-      },
-    ],
+export default function Tasktab() {
+  const [categories, setCategories] = useState({
+    All: [],
+    Completed: [],
+    unfinished: [],
+    // ... other category structures
   });
+  useEffect(() => {
+    const unSubscribe = onSnapshot(myTask, (querySnapshot) => {
+      const recentTasks = [];
+      recentTasks.length = 0;
+
+      querySnapshot.forEach((taskdetails) => {
+        const taskData = taskdetails.data();
+        const timelogged = new Date(taskData.timeLogged);
+        let formattedDate; // Declare formattedDate outside the conditional blocks
+
+        const timeDifferenceInMilliseconds = currentDate - timelogged;
+        const seconds = Math.floor(timeDifferenceInMilliseconds / 1000);
+        if (seconds < 60) {
+          // Less than a minute
+          formattedDate = `${seconds} seconds ago`;
+        } else if (seconds < 3600) {
+          // Less than an hour
+          const minutes = Math.floor(seconds / 60);
+          formattedDate = `${minutes} minutes ago`;
+        } else if (seconds < 86400) {
+          // Less than a day
+          const hours = Math.floor(seconds / 3600);
+          formattedDate = `${hours} hours ago`;
+        } else {
+          // More than a day
+          const days = Math.floor(seconds / 86400);
+          formattedDate = `${days} days ago`;
+        }
+
+        const formattedTask = {
+          id: doc.id,
+          title: taskData.task,
+          description: taskData.description,
+          date: formattedDate,
+          // ... other properties you want to include
+        };
+        recentTasks.push(formattedTask);
+      });
+      setCategories((prevCategories) => ({
+        ...prevCategories,
+        All: [...prevCategories.All, ...recentTasks],
+      }));
+    });
+    return () => unSubscribe();
+  }, []);
 
   return (
+    
     <div className='w-full px-2 py-2 sm:px-0'>
       <Tab.Group>
         <Tab.List className='flex space-x-1 rounded-xl bg-blue-900/20 p-1'>
@@ -98,11 +114,12 @@ export default function Example() {
                     </h3>
 
                     <ul className='mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500'>
-                      <li>{post.date}</li>
+                      <li>{post.description}</li>
                       <li>&middot;</li>
-                      <li>{post.commentCount} comments</li>
-                      <li>&middot;</li>
-                      <li>{post.shareCount} shares</li>
+                      <li>{post.date} comments</li>
+                      {/* <li>&middot;</li>
+                      <li>{post.shareCount} shares</li> */}
+                      {/* </ul> */}
                     </ul>
 
                     <a

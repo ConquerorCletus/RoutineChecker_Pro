@@ -6,18 +6,22 @@ import {
   collection,
   query,
   where,
-  getDocs,
   onSnapshot,
-  QuerySnapshot,
+  deleteDoc,
 } from 'firebase/firestore';
 import PrivateRoute from './PrivateRoute';
+import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
+
 const currentDate = new Date();
 const userId = auth.currentUser?.uid;
-const myTask = query(collection(db, 'tasks'), where('userId', '==', userId));
+const myTask = userId
+  ? query(collection(db, 'tasks'), where('userId', '==', userId))
+  : null;
 
 export default function Tasktab() {
   const [categories, setCategories] = useState({
@@ -26,54 +30,88 @@ export default function Tasktab() {
     unfinished: [],
     // ... other category structures
   });
+
+  const [editingTask, setEditingTask] = useState(null);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
+
   useEffect(() => {
-    const unSubscribe = onSnapshot(myTask, (querySnapshot) => {
-      const recentTasks = [];
-      recentTasks.length = 0;
+    if (myTask) {
+      const unSubscribe = onSnapshot(myTask, (querySnapshot) => {
+        const recentTasks = [];
+        recentTasks.length = 0;
 
-      querySnapshot.forEach((taskdetails) => {
-        const taskData = taskdetails.data();
-        const timelogged = new Date(taskData.timeLogged);
-        let formattedDate; // Declare formattedDate outside the conditional blocks
+        querySnapshot.forEach((taskdetails) => {
+          const taskData = taskdetails.data();
+          const timelogged = new Date(taskData.timeLogged);
+          let formattedDate;
 
-        const timeDifferenceInMilliseconds = currentDate - timelogged;
-        const seconds = Math.floor(timeDifferenceInMilliseconds / 1000);
-        if (seconds < 60) {
-          // Less than a minute
-          formattedDate = `${seconds} seconds ago`;
-        } else if (seconds < 3600) {
-          // Less than an hour
-          const minutes = Math.floor(seconds / 60);
-          formattedDate = `${minutes} minutes ago`;
-        } else if (seconds < 86400) {
-          // Less than a day
-          const hours = Math.floor(seconds / 3600);
-          formattedDate = `${hours} hours ago`;
-        } else {
-          // More than a day
-          const days = Math.floor(seconds / 86400);
-          formattedDate = `${days} days ago`;
-        }
+          const timeDifferenceInMilliseconds = currentDate - timelogged;
+          const seconds = Math.floor(timeDifferenceInMilliseconds / 1000);
+          if (seconds < 60) {
+            formattedDate = `${seconds} seconds ago`;
+          } else if (seconds < 3600) {
+            const minutes = Math.floor(seconds / 60);
+            formattedDate = `${minutes} minutes ago`;
+          } else if (seconds < 86400) {
+            const hours = Math.floor(seconds / 3600);
+            formattedDate = `${hours} hours ago`;
+          } else {
+            const days = Math.floor(seconds / 86400);
+            formattedDate = `${days} days ago`;
+          }
 
-        const formattedTask = {
-          id: doc.id,
-          title: taskData.task,
-          description: taskData.description,
-          date: formattedDate,
-          // ... other properties you want to include
-        };
-        recentTasks.push(formattedTask);
+          const formattedTask = {
+            id: taskdetails.id,
+            title: taskData.task,
+            description: taskData.description,
+            date: formattedDate,
+          };
+
+          recentTasks.push(formattedTask);
+        });
+
+        // setCategories((prevCategories) => ({
+        //   ...prevCategories,
+        //   All: [...prevCategories.All, ...recentTasks],
+        // }));
+
+        setCategories((prevCategories) => ({
+          ...prevCategories,
+          All: recentTasks,
+        }));
       });
-      setCategories((prevCategories) => ({
-        ...prevCategories,
-        All: [...prevCategories.All, ...recentTasks],
-      }));
-    });
-    return () => unSubscribe();
-  }, []);
+
+      return () => unSubscribe();
+    }
+  }, [myTask]);
+
+  const handleEditClick = (taskId, currentTitle, currentDescription) => {
+    setEditingTask(taskId);
+    setEditedTitle(currentTitle);
+    setEditedDescription(currentDescription);
+  };
+
+  const handleSaveClick = async () => {
+    // Update the task in the database
+    // ...
+
+    // Reset editing state
+    setEditingTask(null);
+    setEditedTitle('');
+    setEditedDescription('');
+  };
+
+  const handleDelete = async (userId) => {
+    try {
+      await deleteDoc(doc(db, 'tasks', userId));
+      toast.success('Task Deleted successfully');
+    } catch (error) {
+      toast.error('Task Deleted failed');
+    }
+  };
 
   return (
-    
     <div className='w-full px-2 py-2 sm:px-0'>
       <Tab.Group>
         <Tab.List className='flex space-x-1 rounded-xl bg-blue-900/20 p-1'>
@@ -83,7 +121,7 @@ export default function Tasktab() {
               className={({ selected }) =>
                 classNames(
                   'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
-                  'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                  'ring-white/80 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                   selected
                     ? 'bg-white text-blue-700 shadow'
                     : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
@@ -109,26 +147,49 @@ export default function Tasktab() {
                     key={post.id}
                     className='relative rounded-md p-3 hover:bg-gray-100'
                   >
-                    <h3 className='text-sm font-medium leading-5'>
-                      {post.title}
-                    </h3>
-
-                    <ul className='mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500'>
-                      <li>{post.description}</li>
-                      <li>&middot;</li>
-                      <li>{post.date} comments</li>
-                      {/* <li>&middot;</li>
-                      <li>{post.shareCount} shares</li> */}
-                      {/* </ul> */}
-                    </ul>
-
-                    <a
-                      href='#'
-                      className={classNames(
-                        'absolute inset-0 rounded-md',
-                        'ring-blue-400 focus:z-10 focus:outline-none focus:ring-2'
-                      )}
-                    />
+                    {editingTask === post.id ? (
+                      // Render input fields during editing
+                      <>
+                        <input
+                          type='text'
+                          value={editedTitle}
+                          onChange={(e) => setEditedTitle(e.target.value)}
+                        />
+                        <textarea
+                          value={editedDescription}
+                          onChange={(e) => setEditedDescription(e.target.value)}
+                        />
+                        <button onClick={handleSaveClick}>Save</button>
+                      </>
+                    ) : (
+                      // Render title, description, and edit/delete icons
+                      <>
+                        <h3 className='text-sm font-medium leading-5'>
+                          {post.title}
+                        </h3>
+                        <ul className='mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500'>
+                          <li>{post.description}</li>
+                          <li>&middot;</li>
+                          <li>{post.date} comments</li>
+                        </ul>
+                        <div className='flex items-center space-x-2 float-right'>
+                          <AiOutlineEdit
+                            onClick={() =>
+                              handleEditClick(
+                                post.id,
+                                post.title,
+                                post.description
+                              )
+                            }
+                            className='text-xl text-blue-400 cursor-pointer hover:text-2xl'
+                          />
+                          <AiOutlineDelete
+                            onClick={() => handleDelete(post.id)}
+                            className='text-xl text-red-500 cursor-pointer hover:text-2xl'
+                          />
+                        </div>
+                      </>
+                    )}
                   </li>
                 ))}
               </ul>

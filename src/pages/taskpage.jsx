@@ -30,6 +30,9 @@ const taskpage = () => {
         userId: auth.currentUser.uid,
       });
       toast.success('Task added successfully sent!');
+      setTask('');
+      setTaskDescription('');
+      setSelectedDateTime(null);
     } catch (error) {
       toast.error('Error adding task:' + error.message);
     }
@@ -39,7 +42,7 @@ const taskpage = () => {
     <>
       <PrivateRoute>
         <Navbar />
-        <div className='w-full h-[70vh] items-center flex flex-col justify-between bg-blue-600'>
+        <div className='Banner w-full h-[70vh] items-center flex flex-col justify-between'>
           <form
             className='rounded-md w-[50%] h-[50vh] bg-slate-100 my-auto flex flex-col'
             onSubmit={handleSubmit}

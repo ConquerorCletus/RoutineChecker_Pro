@@ -156,7 +156,7 @@ const dNavbar = () => {
           className='group inline-flex bg-blue-600 text-slate-50 h-10 w-50 items-center gap-x-1 text-sm font-semibold leading-6 py-[8px] px-[10px] border-[1px] border-slate-700 rounded-none mt-[1px] mb-[1px] transition-all duration-300 hover:bg-slate-500'
           aria-expanded='false'
         >
-          Business
+          <Link href='/business'>Business</Link>
         </button>
       </div>
     </div>

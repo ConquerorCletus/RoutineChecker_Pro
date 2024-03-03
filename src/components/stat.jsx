@@ -37,7 +37,7 @@ const TaskStats = () => {
 
   return (
     <section className='bg-white p-5 m-3 rounded border-slate-700 border-[1.5px]'>
-      <PrivateRoute>
+      {/* <PrivateRoute> */}
         <h4 className='font-semibold text-[15px]'>Task Stats</h4>
         <div className='flex flex-col lg:flex-row items-center gap-5 mt-5 '>
           <TaskStatItem
@@ -56,7 +56,7 @@ const TaskStats = () => {
             label='Uncompleted'
           />
         </div>
-      </PrivateRoute>
+      {/* </PrivateRoute> */}
     </section>
   );
 };

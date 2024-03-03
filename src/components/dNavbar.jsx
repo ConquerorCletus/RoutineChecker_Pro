@@ -12,8 +12,26 @@ import {
 } from 'react-icons/fa';
 import { FaCalendarCheck } from 'react-icons/fa6';
 import { RxLapTimer } from 'react-icons/rx';
+import { auth } from '../helpers/firebase';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 const dNavbar = () => {
+  const router = useRouter();
+  const handleLogOut = async () => {
+    try {
+      await auth.signOut();
+      toast.success('Logged out successfully!');
+      router.push('/');
+      // window.location.reload();
+
+      // After successful logout, you may redirect the user to a login page or perform any other necessary actions.
+    } catch (error) {
+      console.error('Error logging out:', error);
+      // Handle any logout errors here
+    }
+  };
+
   return (
     <div className='w-full h-[50px] mx-auto flex justify-between bg-slate-50 border-slate-950 border-b-[1px]'>
       <div className='w-[350px] h-10 my-auto'>
@@ -129,15 +147,15 @@ const dNavbar = () => {
               <div className='px-1 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link
-                      href='/'
+                    <button
+                      href='/login'
                       className={`${
                         active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <FaSignOutAlt className='mr-2' />
                       Logout
-                    </Link>
+                    </button>
                   )}
                 </Menu.Item>
               </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TiBusinessCard } from 'react-icons/ti';
 import Navbar from '@/components/dNavbar';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../helpers/firebase';
+import { db, auth } from '../helpers/firebase';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 
@@ -45,6 +45,7 @@ const business = () => {
             // Add employee to the Firestore collection
             await addDoc(employeesCollection, {
               email,
+              userId: auth.currentUser.uid,
               // Additional fields if needed
             });
           }
@@ -101,7 +102,7 @@ const business = () => {
             ))}
 
             <button
-              className='mx-auto mt-[60px] bg-blue-600 text-slate-100 border-solid border-[1px] rounded-none w-[450px] h-[60px] mb-20'
+              className='mx-auto mt-[60px] bg-blue-600 text-slate-100 border-solid border-[1px] rounded-none w-[450px] h-[60px] mb-20 hover:bg-slate-500'
               type='submit'
             >
               Submit

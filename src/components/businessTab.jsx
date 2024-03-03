@@ -22,7 +22,7 @@ function classNames(...classes) {
 const currentDate = new Date();
 const userId = auth.currentUser?.uid;
 const myBusiness = userId
-  ? query(collection(db, 'business'), where('userId', '==', userId))
+  ? query(collection(db, 'businessTask'), where('userId', '==', userId))
   : null;
 
 export default function BusinessTab() {
@@ -103,7 +103,7 @@ export default function BusinessTab() {
   const handleSaveClick = async () => {
     // Update the business in the database
     try {
-      const businessRef = doc(db, 'business', editingBusiness);
+      const businessRef = doc(db, 'businessTask', editingBusiness);
       await updateDoc(businessRef, {
         title: editedTitle,
         description: editedDescription,
@@ -122,7 +122,7 @@ export default function BusinessTab() {
 
   const handleDelete = async (businessId) => {
     try {
-      await deleteDoc(doc(db, 'business', businessId));
+      await deleteDoc(doc(db, 'businessTask', businessId));
       toast.success('Business Deleted successfully');
     } catch (error) {
       toast.error('Business Deleted failed');

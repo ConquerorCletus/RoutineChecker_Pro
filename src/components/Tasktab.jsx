@@ -147,115 +147,113 @@ export default function Tasktab() {
   };
 
   return (
-    <PrivateRoute>
-      <div className='w-full px-2 py-2 sm:px-0'>
-        <Tab.Group>
-          <Tab.List className='flex space-x-1 rounded-xl bg-blue-900/20 p-1'>
-            {Object.keys(categories).map((category) => (
-              <Tab
-                key={category}
-                className={({ selected }) =>
-                  classNames(
-                    'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
-                    'ring-white/80 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-                    selected
-                      ? 'bg-white text-blue-700 shadow'
-                      : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
-                  )
-                }
-              >
-                {category}
-              </Tab>
-            ))}
-          </Tab.List>
-          <Tab.Panels className='mt-2'>
-            {Object.values(categories).map((posts, idx) => (
-              <Tab.Panel
-                key={idx}
-                className={classNames(
-                  'rounded-xl bg-white p-3',
-                  'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
-                )}
-              >
-                <ul>
-                  {posts.map((post) => (
-                    <li
-                      key={post.id}
-                      className='relative rounded-md p-3 hover:bg-gray-100'
-                    >
-                      {editingTask === post.id ? (
-                        // Render input fields during editing
-                        <>
-                          <input
-                            type='text'
-                            value={editedTitle}
-                            onChange={(e) => setEditedTitle(e.target.value)}
-                            className='inline w-[20%] h-10 border-black border-[1px] text-center my-auto'
-                          />
-                          <textarea
-                            value={editedDescription}
-                            onChange={(e) =>
-                              setEditedDescription(e.target.value)
-                            }
-                            className='inline w-[65%] h-10 border-black border-[1px] ml-3 text-center my-auto'
-                          />
-                          <button
-                            className='inline-block py-[14px] px-[32px] sm:py-3 sm:px-6 cursor-pointer text-center rounded-md border-[2px] border-solid float-right bg-blue-600 text-white'
-                            onClick={handleSaveClick}
-                          >
-                            Save
-                          </button>
-                        </>
-                      ) : (
-                        // Render title, description, and edit/delete icons
-                        <>
-                          <h3 className='text-sm font-medium leading-5'>
-                            {post.title}
-                          </h3>
-                          <input
-                            className='float-right mb-5 mr-10'
-                            type='checkbox'
-                            name='checkcompleted'
-                            id=''
-                            checked={post.completed}
-                            onChange={() =>
-                              handleCheckboxChange(post.id, post.completed)
-                            }
-                          />
+    // <PrivateRoute>
+    <div className='w-full px-2 py-2 sm:px-0'>
+      <Tab.Group>
+        <Tab.List className='flex space-x-1 rounded-xl bg-blue-900/20 p-1'>
+          {Object.keys(categories).map((category) => (
+            <Tab
+              key={category}
+              className={({ selected }) =>
+                classNames(
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                  'ring-white/80 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                  selected
+                    ? 'bg-white text-blue-700 shadow'
+                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                )
+              }
+            >
+              {category}
+            </Tab>
+          ))}
+        </Tab.List>
+        <Tab.Panels className='mt-2'>
+          {Object.values(categories).map((posts, idx) => (
+            <Tab.Panel
+              key={idx}
+              className={classNames(
+                'rounded-xl bg-white p-3',
+                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+              )}
+            >
+              <ul>
+                {posts.map((post) => (
+                  <li
+                    key={post.id}
+                    className='relative rounded-md p-3 hover:bg-gray-100'
+                  >
+                    {editingTask === post.id ? (
+                      // Render input fields during editing
+                      <>
+                        <input
+                          type='text'
+                          value={editedTitle}
+                          onChange={(e) => setEditedTitle(e.target.value)}
+                          className='inline w-[20%] h-10 border-black border-[1px] text-center my-auto'
+                        />
+                        <textarea
+                          value={editedDescription}
+                          onChange={(e) => setEditedDescription(e.target.value)}
+                          className='inline w-[65%] h-10 border-black border-[1px] ml-3 text-center my-auto'
+                        />
+                        <button
+                          className='inline-block py-[14px] px-[32px] sm:py-3 sm:px-6 cursor-pointer text-center rounded-md border-[2px] border-solid float-right bg-blue-600 text-white'
+                          onClick={handleSaveClick}
+                        >
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      // Render title, description, and edit/delete icons
+                      <>
+                        <h3 className='text-sm font-medium leading-5'>
+                          {post.title}
+                        </h3>
+                        <input
+                          className='float-right mb-5 mr-10'
+                          type='checkbox'
+                          name='checkcompleted'
+                          id=''
+                          checked={post.completed}
+                          onChange={() =>
+                            handleCheckboxChange(post.id, post.completed)
+                          }
+                        />
 
-                          <ul className='mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500'>
-                            <li>{post.description}</li>
-                            <li>&middot;</li>
-                            <li>{post.date}</li>
-                            <li>&middot;</li>
-                            <li>{post.deadline}</li>
-                          </ul>
-                          <div className='flex items-center space-x-2 float-right'>
-                            <AiOutlineEdit
-                              onClick={() =>
-                                handleEditClick(
-                                  post.id,
-                                  post.title,
-                                  post.description
-                                )
-                              }
-                              className='text-xl text-blue-400 cursor-pointer hover:text-2xl'
-                            />
-                            <AiOutlineDelete
-                              onClick={() => handleDelete(post.id)}
-                              className='text-xl text-red-500 cursor-pointer hover:text-2xl'
-                            />
-                          </div>
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </Tab.Panel>
-            ))}
-          </Tab.Panels>
-        </Tab.Group>
-      </div>
-    </PrivateRoute>
+                        <ul className='mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500'>
+                          <li>{post.description}</li>
+                          <li>&middot;</li>
+                          <li>{post.date}</li>
+                          <li>&middot;</li>
+                          <li>{post.deadline}</li>
+                        </ul>
+                        <div className='flex items-center space-x-2 float-right'>
+                          <AiOutlineEdit
+                            onClick={() =>
+                              handleEditClick(
+                                post.id,
+                                post.title,
+                                post.description
+                              )
+                            }
+                            className='text-xl text-blue-400 cursor-pointer hover:text-2xl'
+                          />
+                          <AiOutlineDelete
+                            onClick={() => handleDelete(post.id)}
+                            className='text-xl text-red-500 cursor-pointer hover:text-2xl'
+                          />
+                        </div>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </Tab.Panel>
+          ))}
+        </Tab.Panels>
+      </Tab.Group>
+    </div>
+    // </PrivateRoute>
   );
 }

@@ -7,7 +7,7 @@ const businessTask = () => {
   return (
     <>
       <Navbar />
-      <section className='Banner h-[70vh] w-[100vw]'>
+      <section className='Banner h-[80vh] w-[100vw]'>
         <Form />
       </section>
       <section>

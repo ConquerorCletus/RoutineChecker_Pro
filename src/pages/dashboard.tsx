@@ -15,7 +15,7 @@ const dashboard = () => {
         <TaskCard />
         <Tasktab />
       </PrivateRoute>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

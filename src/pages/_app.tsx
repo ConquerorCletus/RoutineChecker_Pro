@@ -12,9 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ToastContainer />
-      <PrivateRoute>
-        <Component {...pageProps} />
-      </PrivateRoute>
+      {/* <PrivateRoute> */}
+      <Component {...pageProps} />
+      {/* </PrivateRoute> */}
     </>
   );
 }

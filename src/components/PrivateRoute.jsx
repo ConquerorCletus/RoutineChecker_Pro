@@ -28,6 +28,6 @@ const PrivateRoute = ({ children }) => {
     ? children
     : // Using Next.js router for navigation
       router.push('/login');
-};
+}; 
 
 export default PrivateRoute;

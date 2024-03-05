@@ -17,7 +17,7 @@ const TaskAssignmentForm = () => {
     employeeEmail: '',
     title: '',
     description: '',
-    // deadline: '',
+    deadline: '',
   });
 
   const [employees, setEmployees] = useState([]);

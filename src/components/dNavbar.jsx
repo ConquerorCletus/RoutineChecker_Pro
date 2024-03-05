@@ -102,6 +102,8 @@ const dNavbar = () => {
                     </Link>
                   )}
                 </Menu.Item>
+                {/*
+                To be implemented in the a week with calendly api.
                 <Menu.Item>
                   {({ active }) => (
                     <Link
@@ -114,7 +116,7 @@ const dNavbar = () => {
                       Mark Calendar
                     </Link>
                   )}
-                </Menu.Item>
+                </Menu.Item> */}
               </div>
               <div className='px-1 py-1'>
                 <Menu.Item>
@@ -147,27 +149,20 @@ const dNavbar = () => {
               <div className='px-1 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <button
-                      href='/login'
+                    <Link
+                      href='/'
                       className={`${
                         active ? 'bg-blue-500 text-white' : 'text-gray-900'
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <FaSignOutAlt className='mr-2' />
                       Logout
-                    </button>
+                    </Link>
                   )}
                 </Menu.Item>
               </div>
             </Menu.Items>
           </Transition>
-          {/* <button
-          type='button'
-          className='inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 py-[8px] px-[15px] border-[1px] border-slate-700 rounded-r-lg mt-[1px] mb-[1px]'
-          aria-expanded='false'
-        >
-          Business
-        </button> */}
         </Menu>
         <button
           type='button'

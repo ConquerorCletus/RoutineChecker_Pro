@@ -6,29 +6,44 @@ import {
   query,
   where,
   onSnapshot,
-  orderBy,
+  // orderBy,
   limit,
 } from 'firebase/firestore';
+import Spinner from './Spinner';
 
 const Banner = () => {
   const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // console.log('db: ', db);
     const fetchProfileData = async () => {
       try {
         const profileQuery = query(
           collection(db, 'profiles'),
           where('userId', '==', auth.currentUser?.uid),
-          orderBy('timestamp', 'desc'), // Assuming you have a 'timestamp' field
           limit(1)
         );
 
+        console.log('current data:', profileQuery);
+
         const unsubscribe = onSnapshot(profileQuery, (querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            setProfileData(data);
-          });
+          if (!querySnapshot.empty) {
+            // Check if the querySnapshot is not empty
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              console.log('Profile data:', data);
+              setProfileData(data);
+              setLoading(false);
+            });
+          } else {
+            // Set profileData to null or an empty object if no data is found
+            setProfileData(null);
+            setLoading(false);
+          }
         });
+
+        // console.log('Profile data:', profileData);
 
         return () => unsubscribe();
       } catch (error) {
@@ -42,11 +57,21 @@ const Banner = () => {
     }
   }, [auth.currentUser]);
 
+  if (loading) {
+    return <Spinner />;
+  }
+
+  // console.log('Profile data (outside useEffect):', profileData);
+
   return (
     <div className='Banner p-10 justify-between'>
       <div className='ml-20 rounded-full w-40 h-40 border-double border-4 border-slate-50'>
         <Image
-          src={auth.currentUser?.displayImageUrl || '/picon.png'}
+          src={
+            auth.currentUser?.displayImageUrl
+              ? profileData?.imageURL
+              : '/picon.png'
+          }
           alt='Profile Icon'
           layout='responsive'
           width={160}
@@ -57,8 +82,7 @@ const Banner = () => {
       </div>
       <div className='justify-center align-middle h-fit my-auto'>
         <h1 className='font-sans text-5xl text-white text-center my-auto'>
-          Welcome Back,{' '}
-          {profileData?.name ? auth.currentUser.displayName : 'User'}
+          Welcome Back, {profileData?.name || 'User'}
         </h1>
         <p className='font-serif text-xl text-white text-center mt-20'>
           {profileData?.affirmation || 'I must always be on time'}

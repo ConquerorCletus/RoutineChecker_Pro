@@ -31,7 +31,7 @@ const profile = () => {
         // Handle case where no image is selected
         throw new Error('No image selected');
       }
-      const storageRef = ref(storage, `Profile-image/${selectedImage.name}`);
+      const storageRef = ref(storage, `${selectedImage.name}`);
       console.log(storageRef);
       const uploadPicture = uploadBytesResumable(storageRef, selectedImage);
       console.log(uploadPicture);
@@ -45,9 +45,9 @@ const profile = () => {
 
       // Add the user profile data to Firestore including the image URL
       const profileData = {
-        name: name, // Replace with the actual name
-        affirmation: sentence, // Replace with the actual affirmation
-        imageURL: downloadURL || '', // Replace with the actual downloadURL
+        name: name,
+        affirmation: sentence,
+        imageURL: downloadURL || '',
         userId: auth.currentUser?.uid,
         timestamp: serverTimestamp(), // Add the timestamp field
       };
@@ -87,13 +87,13 @@ const profile = () => {
             onMouseLeave={() => setIsHovered(false)}
           >
             <img
-              // src={
-              //   selectedImage
-              //     ? URL.createObjectURL(selectedImage)
-              //     : '/picon.png'
-              // }
+              src={
+                selectedImage
+                  ? URL.createObjectURL(selectedImage)
+                  : '/picon.png'
+              }
               // src={selectedImage ? selectedImage : '/picon.png'}
-              src='/picon.png'
+              // src='/picon.png'
               alt=''
               className={`h-80 w-80 bg-slate-50 rounded-full object-cover transition-opacity ${
                 isHovered ? 'opacity-50' : 'opacity-100'

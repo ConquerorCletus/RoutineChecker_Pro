@@ -123,7 +123,7 @@ export default function BusinessTab() {
   const handleDelete = async (businessId) => {
     try {
       await deleteDoc(doc(db, 'businessTask', businessId));
-      toast.success('Business Deleted successfully');
+      toast.success('Business Task Deleted successfully');
     } catch (error) {
       toast.error('Business Deleted failed');
     }

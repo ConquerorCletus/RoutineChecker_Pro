@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Navbar from '../components/navbar';
 import About from '../components/about';
 import Team from '../components/team';
-import Contact from '../components/contact';
+import Contact from '../components/contact.jsx';
 import Footer from '../components/footer';
 // import { Link } from "react-router-dom";
 import task from '../images/task.png';

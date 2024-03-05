@@ -11,6 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.2.0",
     "@headlessui/react": "^1.7.18",
     "alpinejs": "^3.10.2",
     "axios": "^1.6.7",

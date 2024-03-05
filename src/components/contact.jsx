@@ -9,6 +9,7 @@ import {
   FiTwitter,
   FiLinkedin,
 } from 'react-icons/fi';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const Form = useRef();
@@ -16,10 +17,23 @@ const Contact = () => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
 
-  // const sendEmail = (e) => {
-  //   e.preventDefault();
-  //   // ... (existing code for sending email)
-  // };
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm('service_bu5l0nb', 'template_9u8k3ro', Form.current, {
+        publicKey: 'GAzdmQee5ZBJjuiqE',
+      })
+      .then(
+        () => {
+          toast.success('Message successfully sent!');
+          window.location.reload(false);
+        },
+        (error) => {
+          toast.error('Failed to send the message, please try again');
+        }
+      );
+  };
 
   return (
     <>
@@ -91,7 +105,7 @@ const Contact = () => {
                 <div className='w-full px-4 sm:w-1/2'>
                   <div className='max-w-xs mx-auto'>
                     <div className='inline-flex items-center bg-blue-500 justify-center w-12 h-12 mb-6 text-gray-10 rounded-full'>
-                      <FiHeart size={20} />
+                      <FiHeart className='text-white' size={20} />
                     </div>
                     <h2 className='mb-4 text-xl font-bold leading-9 text-gray-700 md:text-2xl dark:text-gray-400'>
                       Social
@@ -121,8 +135,8 @@ const Contact = () => {
             {/* Right Section - Contact Form */}
             <div className='w-full px-4 lg:w-1/2'>
               <form
-                // ref={Form}
-                // onSubmit={sendEmail}
+                ref={Form}
+                onSubmit={sendEmail}
                 className='p-6 bg-gray-50 dark:bg-gray-900'
               >
                 {/* Email Input */}

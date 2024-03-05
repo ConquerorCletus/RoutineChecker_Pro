@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../helpers/firebase';
 import { useRouter } from 'next/router';
 import Spinner from '../components/Spinner';
 
@@ -9,7 +10,7 @@ const PrivateRoute = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const auth = getAuth();
+    // const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsAuthenticated(!!user);
       setLoading(false);

@@ -10,10 +10,11 @@ import {
   deleteDoc,
   updateDoc,
 } from 'firebase/firestore';
-import PrivateRoute from './PrivateRoute';
+// import PrivateRoute from './PrivateRoute';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import Spinner from './Spinner';
+// import TaskCard from '@/components/stat';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -76,11 +77,7 @@ export default function Tasktab() {
           recentTasks.push(formattedTask);
         });
 
-        // setCategories((prevCategories) => ({
-        //   ...prevCategories,
-        //   All: [...prevCategories.All, ...recentTasks],
-        // }));
-
+        
         setCategories((prevCategories) => ({
           ...prevCategories,
           All: recentTasks,

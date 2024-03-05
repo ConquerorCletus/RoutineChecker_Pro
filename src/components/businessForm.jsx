@@ -25,13 +25,14 @@ const TaskAssignmentForm = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const userId = auth.currentUser?.uid;
+        // const userId = auth.currentUser?.uid;
         const employeesCollection = collection(db, 'employees');
-        const querySnapshot = await getDocs(
-          query(employeesCollection, where('userId', '==', userId))
-        );
+        // const querySnapshot = await getDocs(
+        //   query(employeesCollection, where('userId', '==', userId))
+        // );
+        const querySnapshot = await getDocs(employeesCollection);
         const employeeList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
+          // id: doc.id,
           email: doc.data().email,
         }));
         setEmployees(employeeList);

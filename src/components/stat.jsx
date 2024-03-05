@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaTasks } from 'react-icons/fa';
 import { GrTask } from 'react-icons/gr';
 import { BsListTask } from 'react-icons/bs';
-import PrivateRoute from './PrivateRoute';
+// import PrivateRoute from './PrivateRoute';
 import { getTasksByUserId } from '../helpers/getTask';
 import { toast } from 'react-toastify';
 

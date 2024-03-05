@@ -1,22 +1,29 @@
 import { db, auth } from './firebase';
-import { collection, query, where } from 'firebase/firestore';
-// import {toast} from 'react-toastify';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
-const getTasksByUserId = () => {
+const getTasksByUserId = async () => {
   try {
-    let userId = auth.currentUser?.uid;
-    const tasksSnapshot = userId
-      ? query(collection(db, 'tasks'), where('userId', '==', userId))
-      : 0;
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      throw new Error('User not authenticated');
+    }
+
+    const tasksQuery = query(
+      collection(db, 'tasks'),
+      where('userId', '==', userId)
+    );
+    const tasksSnapshot = await getDocs(tasksQuery);
 
     const tasks = tasksSnapshot.docs.map((doc) => ({
       id: doc.id,
+      completed: doc.data().completed, // Include the completed property
       ...doc.data(),
     }));
 
     return tasks;
   } catch (error) {
-    console.log('Error fetching tasks:', error);
+    console.error('Error fetching tasks:', error);
     throw error;
   }
 };

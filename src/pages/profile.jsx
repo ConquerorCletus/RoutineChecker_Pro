@@ -4,7 +4,12 @@ import { FaRegUser } from 'react-icons/fa';
 import { GiSelfLove } from 'react-icons/gi';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../helpers/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
 import { storage } from '../helpers/firebase';
 import { toast } from 'react-toastify';
 // import PrivateRoute from '../components/PrivateRoute';
@@ -14,6 +19,7 @@ import Router from 'next/router';
 const profile = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [downloadURL, setDownloadURL] = useState(null);
   const [name, setName] = useState('');
   const [sentence, setSentence] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -22,7 +28,47 @@ const profile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedImage(file);
+    // const storage = getStorage();
+    // const storageRef = ref(storage, `/profile-image/${selectedImage.name}`);
+    // console.log('storageRef: ', storageRef);
+    // const uploadPicture = uploadBytesResumable(storageRef, selectedImage);
+
+    // // Handle successful uploads on complete
+    // uploadPicture
+    //   .then((snapshot) => {
+    //     getDownloadURL(snapshot.ref).then((downloadURL) => {
+    //       console.log('File available at', downloadURL);
+    //       setDownloadURL(downloadURL);
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     // Handle unsuccessful uploads
+    //     console.error('Error uploading image:', error);
+    //   });
+    let storageRef, uploadPicture;
+
+    if (file) {
+      const storageRef = ref(storage, `/Profile-image/${file.name}`);
+      console.log('storageRef: ', storageRef);
+
+      const uploadPicture = uploadBytesResumable(storageRef, file);
+      console.log('uploadPicture: ', uploadPicture);
+
+      // Handle successful uploads on complete
+      uploadPicture
+        .then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            setDownloadURL(downloadURL);
+          });
+        })
+        .catch((error) => {
+          // Handle unsuccessful uploads
+          console.error('Error uploading image:', error);
+        });
+    }
   };
+  // console.log('downloadURL: ', downloadURL);
   const handleSave = async (e) => {
     e.preventDefault();
     try {
@@ -31,17 +77,15 @@ const profile = () => {
         // Handle case where no image is selected
         throw new Error('No image selected');
       }
-      const storageRef = ref(storage, `${selectedImage.name}`);
       console.log(storageRef);
-      const uploadPicture = uploadBytesResumable(storageRef, selectedImage);
       console.log(uploadPicture);
 
       // Get the download URL once the image is uploaded
-      const downloadURL =
-        uploadPicture.state === 'success'
-          ? await getDownloadURL(storageRef)
-          : null;
-      console.log('Download URL:', downloadURL);
+      // const downloadURL =
+      //   uploadPicture.state === 'success'
+      //     ? await getDownloadURL(storageRef)
+      //     : null;
+      // console.log('Download URL:', downloadURL);
 
       // Add the user profile data to Firestore including the image URL
       const profileData = {
@@ -49,8 +93,10 @@ const profile = () => {
         affirmation: sentence,
         imageURL: downloadURL || '',
         userId: auth.currentUser?.uid,
-        timestamp: serverTimestamp(), // Add the timestamp field
+        // timestamp: serverTimestamp(), // Add the timestamp field
       };
+
+      console.log('profileData: ', profileData);
 
       addDoc(collection(db, 'profiles'), profileData);
 

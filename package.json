@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev-next\" \"npm run dev-server\"",
+    "dev": "npm run dev-next",
     "build": "next build",
     "start": "next start",
     "dev-next": "next dev",

@@ -1,11 +1,15 @@
-# RoutineChecker Pro
-Routine Checker sets itself apart by focusing on personal productivity and goal achievement, with a unique emphasis on the Pomodoro technique and small business task delegation. By reimagining these features in a unified app, Routine Checker aims to provide a tailored solution for its target user base.
- 
+# RoutineChecker Pro for Individual and Business.
+
+Routine Checker Pro sets itself apart by focusing on personal productivity and goal achievement, with a unique emphasis on the Pomodoro technique and small business task delegation. By reimagining these features in a unified app, Routine Checker pro aims to provide a tailored solution for its target user base. Effortlessly manage and track your tasks to enhance productivity and achieve your goals. Stay organized;additionally, you
+can efficiently oversee your business using our employee task
+tracking feature on our application.
+
 <img align="center" src="./public/LandingPage.PNG">
 
 
 
 ## Getting Started
+
 First, run the development server:
 
 ```bash
@@ -18,7 +22,13 @@ pnpm dev
 bun dev
 ```
 
+# V1 features
+- Individual task management.
+- Email Notifications.
+- Employee task management through Emailing.
+
 ## Help
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
@@ -26,6 +36,7 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ## Learn More
+
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
@@ -34,18 +45,17 @@ To learn more about Next.js, take a look at the following resources:
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
 # Contributors
+
 - [Chibuike Cletus Nwafor](https://github.com/ConquerorCletus)
-- [Azeez Tiamiyu](https://github.com/hertheyhermee)
 - [Kimberly Peters]()
 - [Aisha Adewoyin](https://github.com/Aishat452)
 
-
 # Becoming a Collaborator.
+
 1. Fork the repository.
 2. Create a branch named 'fix' to make adjustment or 'Features' to add a new feature.
 3. Push the branch to your forked repository.
-4. Submit a Pull request detailing the Change you made. 
-
+4. Submit a Pull request detailing the Change you made.
 
 ## Deploy on Vercel
 
